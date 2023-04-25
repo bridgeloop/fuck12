@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="./fuck12.js"></script>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			html {
+				height: 100%;
+				font-family: monospace;
+				background: black;
+				color: white;
+			}
+			body {
+				margin: 0;
+				height: 100%;
+				display: grid;
+				grid-template-columns: 1fr 5fr;
+			}
+			#sidebar {
+				overflow-y: scroll;
+				word-wrap: break-word;
+				border-right: solid 1px white;
+			}
+			#nav {
+				padding: 1em;
+				text-align: center;
+				border-bottom: solid 1px white;
+				text-decoration: none;
+				color: white;
+			}
+			#nav h2 {
+				margin: 0;
+			}
+			#links {
+				padding: 1em;
+			}
+			#sidebar .i1 {
+				padding-left: 1rem;
+			}
+			#sidebar .i2 {
+				padding-left: 2rem;
+			}
+			#sidebar a {
+				display: block;
+			}
+			#content {
+				padding: 1em;
+				overflow-y: scroll;
+				position: relative;
+			}
+			#content h1, #content h2, #content p {
+				margin: 0;
+			}
+			#content h1::after {
+				display: block;
+				height: 1px;
+				background: red;
+				content: "";
+			}
+			#content article {
+				background: gray;
+			}
+			:root {
+				--sidebar-display: none;
+				--content-visibility: visible;
+				--content-padding: 1rem;
+				--content-width: auto;
+			}
+			
+			@media screen and (max-width: 70em) {
+				body {
+					grid-template-columns: 1fr;
+				}
+				#sidebar {
+					display: var(--sidebar-display);
+				}
+				#content {
+					visibility: var(--content-visibility);
+					padding: var(--content-padding);
+					width: var(--content-width);
+				}
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div id="sidebar">
+			<a id="nav" href="">
+				<h2>fuck12</h2>
+			</a>
+			<div id="links"></div>
+		</div>
+		<div id="content">
+			<h1 data-depth="0" id="motherfuck-1">motherfuck 1</h1>
+			<h2 data-depth="1" id="fucker">fucker</h2>
+			<p>ecstatic</p>
+
+			<h1 data-depth="0" id="the-computer">the computer</h1>
+			<h2 data-depth="1" id="computer">computer</h2>
+			<p>the computer</p>
+
+			<h1 data-depth="0" id="hella-tall">hella tall</h1>
+			<h2 data-depth="1" id="fr">fr</h2>
+			<div style="height: 100vh; background: green;"></div>
+			
+			<h1 data-depth="0" id="motherfuck-2">motherfuck 2</h1>
+			<h2 data-depth="1" id="welcome">welcome</h2>
+			<p>x</p>
+			<h3 data-depth="2" id="x">x</h3>
+			<div style="height: 100vh; background: green;"></div>
+			<h2 data-depth="1" id="y">y</h2>
+			<div style="height: 100vh; background: green;"></div>
+			
+			<h1 data-depth="0" id="motherfuck-3">motherfuck 3</h1>
+			<h2 data-depth="1" id="fuck">fuck</h2>
+			<p>fuck</p>
+
+			<h1 data-depth="0" id="h1-1">h1-1</h1>
+		</div>
+		
+		<script>
+			function doubleRAF(fn) {
+				return requestAnimationFrame(_ =>
+					requestAnimationFrame(t => fn(t))
+				);
+			}
+			let content = document.querySelector("#content");
+			let sidebar = document.querySelector("#sidebar");
+			
+			// populate sidebar
+			for (let el of content.querySelectorAll("h1, h2, h3")) {
+				let a = document.createElement("a");
+				if (el.nodeName === "H2") {
+					a.classList.add("i1");
+				} else if (el.nodeName === "H3") {
+					a.classList.add("i2");
+				}
+				a.href = "#" + el.id;
+				a.onclick = event => doubleRAF(_ => window.onhashchange(event));
+				a.dataset.associated = el.id;
+				a.innerText = el.innerText;
+				sidebar.children.links.append(a);
+			}
+
+			let elemMap = new WeakMap;
+			for (let el of sidebar.children.links.children) {
+				let associated = document.getElementById(el.dataset.associated);
+				elemMap.set(associated, el);
+			}
+
+			let root = document.querySelector(":root");
+			function mobile_openSidebar() {
+				root.style.setProperty("--sidebar-display", "block");
+				root.style.setProperty("--content-visibility", "hidden");
+				root.style.setProperty("--content-padding", "0");
+				root.style.setProperty("--content-width", "0px");
+			}
+			function mobile_closeSidebar() {
+				root.style.setProperty("--sidebar-display", "none");
+				root.style.setProperty("--content-visibility", "visible");
+				root.style.setProperty("--content-padding", "1rem");
+				root.style.setProperty("--content-width", "auto");
+			}
+
+			let activeEl = null;
+			let inst = new Fuck12({
+				content,
+				activateCallback: (el, rel) => {
+					let associated = elemMap.get(el);
+					associated.style.background = "red";
+					if (rel === Fuck12.HEADER_BASE) {
+						activeEl = el;
+					}
+					return;
+				},
+				deactivateCallback: el => {
+					let associated = elemMap.get(el);
+					associated.style.background = "";
+					return;
+				},
+
+				registerHashchange: false,
+			});
+			
+			window.onhashchange = (function onhashchange(event) {
+				// ignore click event if the new
+				// hash element is already active
+				if (event && event.type === "click") {
+					try {
+						let e = Fuck12.hashEl();
+						if (activeEl === e) {
+							return;
+						}
+					} catch {}
+				}
+
+				inst.hashchange();
+				return onhashchange;
+			})();
+		</script>
+	</body>
+	
+</html>
