@@ -16,7 +16,7 @@
 	OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-// (horizonatal scrolling not implemented btw)
+// (horizontal scrolling not implemented btw)
 class Fuck12 {
 	static NO_SET_HASH = 0b00;
 	static CONTENT_HASH = 0b01;
