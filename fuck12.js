@@ -75,6 +75,8 @@ class Fuck12 {
 	signal() {
 		this.sentSignal = true;
 		this.observer.observe(this.signalEl);
+
+		return;
 	}
 
 	hashchange = _ => {
