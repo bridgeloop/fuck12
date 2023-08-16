@@ -17,6 +17,8 @@
 */
 
 // (horizontal scrolling not implemented btw)
+// to-do: maybe allow specifying a scrolling container separate from the content container?
+// to-do: also maybe take a list of content elements, rather than looking at a content container's child elements?
 class Fuck12 {
 	static NO_SET_HASH = 0b00;
 	static CONTENT_HASH = 0b01;
@@ -247,6 +249,10 @@ class Fuck12 {
 			for (let entry of entries) {
 				let target = entry.target;
 				if (entry.isIntersecting) {
+					// element comes IN FROM THE TOP OF THE VIEWPORT
+					// to-do: maybe cache the (relative) first header
+					// element that appears before this one, as to
+					// avoid searching for it each time this element appears?
 					if (this.csp <= sp) {
 						this.processEl({
 							targetEl: target,
@@ -297,7 +303,7 @@ class Fuck12 {
 			window.addEventListener("hashchange", this.hashchange);
 		}
 	}
-	destructor() {
+	destroy() {
 		this.observer.disconnect();
 		this.observer = null;
 		window.removeEventListener("hashchange", this.hashchange);
